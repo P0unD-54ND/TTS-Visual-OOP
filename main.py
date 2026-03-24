@@ -94,7 +94,7 @@ if __name__ == "__main__":
     start_time = time.time()
     
     # // REASONING: Firing the primary rendering sequence with the timestamped output target.
-    render_engine.execute_render(text_file="sermon_manuscript.txt", output_mp4=video_filepath)
+    render_engine.execute_render(text_file="source_manuscript.txt", output_mp4=video_filepath)
     
     # // REASONING: Capturing the precise Unix epoch timestamp immediately after successful muxing.
     end_time = time.time()

@@ -12,6 +12,8 @@ tts_models/
 *.m4a
 *.mp4
 *.wav
+*.bak
+*.lnk
 
 # [REASONING]: Ignore the raw manuscript and logs to keep the repo clean.
 sermon_manuscript.txt
