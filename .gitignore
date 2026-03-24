@@ -16,7 +16,7 @@ tts_models/
 *.lnk
 
 # [REASONING]: Ignore the raw manuscript and logs to keep the repo clean.
-sermon_manuscript.txt
+source_manuscript.txt
 *log.txt
 
 # [REASONING]: Ignore Python cache files.
