@@ -1,0 +1,176 @@
+# -*- coding: utf-8 -*-
+# ==============================================================================
+# [FILE]: theological_parser.py
+# [TITLE]: Linguistic Normalization & Voice Extraction Object (Fully Expanded)
+# [SECURITY PROTOCOL]: Local Execution Only - Workspace Level D: Drive
+# [FORENSIC STRATEGY]: Tag Extraction | Terminal State Evaluator | Full Traceability.
+# Copyright (c) 2026 Dennis Sayer. All Rights Reserved. Written Mar-24-2026 10:30.
+# ==============================================================================
+
+# // REASONING: Importing regular expressions for phonetic and structural normalization.
+import re
+
+# // REASONING:
+# // [INPUT DEFINITION BLOCK]: TheologicalParser (Class)
+# // [PURPOSE]: Encapsulates linguistic rules, voice tag extraction, and phonetic stabilization.
+class TheologicalParser:
+
+    # // REASONING:
+    # // [INPUT DEFINITION BLOCK]: __init__
+    # // [VARIABLE]: self | [TYPE]: Object | [PURPOSE]: Initializing the internal state of the parser instance.
+    def __init__(self):
+        # // REASONING: Establishing the neural chunking limit as an object property.
+        self.max_chars = 200
+        
+        # // REASONING: Storing the acoustic translation dictionary as internal object state.
+        self.replacements = {
+            r"\bESV\b": "E-S-V",
+            r"\bNASB\b": "N-A-S-B",
+            r"\bKJV\b": "K-J-V",
+            r"\bNIV\b": "N-I-V",
+            r";": ",",     # // REASONING: Translating semicolons to commas for AI breathing.
+            r":": ",",     # // REASONING: Translating colons to commas.
+            r"—": ", ",    # // REASONING: Translating em-dashes to commas.
+            r"–": ", "     # // REASONING: Translating en-dashes to commas.
+        }
+    # // REASONING: Closing the initialization method.
+
+    # // REASONING:
+    # // [INPUT DEFINITION BLOCK]: extract_voice_info
+    # // [VARIABLE]: self | [TYPE]: Object | [PURPOSE]: Accesses internal class state.
+    # // [VARIABLE]: text | [TYPE]: String | [PURPOSE]: The raw manuscript paragraph.
+    # // [VARIABLE]: default_voice | [TYPE]: String | [PURPOSE]: The fallback voice profile.
+    def extract_voice_info(self, text, default_voice):
+        # // REASONING: Searching the paragraph for the explicit [[VOICE: Name]] markup tag.
+        match = re.search(r'\[\[VOICE:\s*(.*?)\]\]', text)
+        
+        # // REASONING: Evaluating if the regex engine found a matching tag.
+        if match:
+            # // REASONING: Extracting the captured voice name and stripping surrounding whitespace.
+            target_voice = match.group(1).strip()
+            
+            # // REASONING: Ruthlessly destroying the tag from the text so it never reaches the renderers.
+            clean_text = re.sub(r'\[\[VOICE:.*?\]\]', '', text).strip()
+            
+            # // REASONING: Returning the sanitized text and the new target voice.
+            return clean_text, target_voice
+        # // REASONING: Closing the match evaluation block.
+        
+        # // REASONING: Returning the unaltered text and the default voice if no tag existed.
+        return text, default_voice
+    # // REASONING: Closing the extract_voice_info method.
+
+    # // REASONING:
+    # // [INPUT DEFINITION BLOCK]: normalize_text
+    # // [VARIABLE]: self | [TYPE]: Object | [PURPOSE]: Accesses internal class dictionaries.
+    # // [VARIABLE]: text | [TYPE]: String | [PURPOSE]: The raw manuscript paragraph to process.
+    def normalize_text(self, text):
+        # // REASONING: Executing the acoustic scripture expansion for book/chapter/verse.
+        text = re.sub(r'((?:[1-3]\s+)?[A-Z][a-z]+)\s+(\d+):(\d+)', r'\1 chapter \2 verse \3', text)
+
+        # // REASONING: Iterating through the internal replacements dictionary.
+        for pattern, replacement in self.replacements.items():
+            # // REASONING: Executing regex substitution based on the object's ruleset.
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+        # // REASONING: Closing the iteration loop.
+        
+        # // REASONING: Returning the acoustically normalized string.
+        return text
+    # // REASONING: Closing the normalize_text method.
+
+    # // REASONING:
+    # // [INPUT DEFINITION BLOCK]: stabilize_chunk
+    # // [VARIABLE]: self | [TYPE]: Object | [PURPOSE]: Accesses internal class state.
+    # // [VARIABLE]: text | [TYPE]: String | [PURPOSE]: The parsed chunk requiring terminal anchors.
+    # // [VARIABLE]: is_last | [TYPE]: Boolean | [PURPOSE]: Flag indicating absolute final audio sequence.
+    def stabilize_chunk(self, text, is_last=False):
+        # // REASONING: Stripping leading and trailing whitespace.
+        text = text.strip()
+        
+        # // REASONING: Evaluating if the chunk contains actual alphanumeric speech data.
+        if not any(char.isalnum() for char in text):
+            # // REASONING: Returning an empty string if no speech is detected.
+            return ""
+        # // REASONING: Closing the alphanumeric evaluation block.
+
+        # // REASONING: Scrubbing leading non-word characters that trigger start-hallucinations.
+        text = re.sub(r'^[^\w\s]+', '', text)
+        
+        # // REASONING: THE TERMINAL STATE EVALUATOR.
+        # // Ruthlessly stripping ALL trailing punctuation and spaces down to the final raw character.
+        text = text.rstrip('.!?,";:- ')
+        
+        # // REASONING: Evaluating if this is the absolute final sequence of the video.
+        if is_last:
+            # // REASONING: Applying the Universal Exit trailing ellipsis for a natural fade.
+            text = text + "..."
+        # // REASONING: Evaluating standard mid-video text blocks.
+        else:
+            # // REASONING: Applying the Verbless Cadence logic for headers.
+            if len(text) < 60:
+                # // REASONING: Short chunks (headers) receive an ellipsis to force a clean, silent pitch drop.
+                text = text + "..."
+            # // REASONING: Evaluating standard length paragraphs.
+            else:
+                # // REASONING: Standard paragraphs receive a singular, hard terminal period.
+                text = text + "."
+            # // REASONING: Closing the length evaluation.
+        # // REASONING: Closing the terminal check.
+
+        # // REASONING: Returning the perfectly stabilized text.
+        return text
+    # // REASONING: Closing the stabilize_chunk method.
+
+    # // REASONING:
+    # // [INPUT DEFINITION BLOCK]: split_text
+    # // [VARIABLE]: self | [TYPE]: Object | [PURPOSE]: Accesses internal class state.
+    # // [VARIABLE]: text | [TYPE]: String | [PURPOSE]: The paragraph string to divide.
+    def split_text(self, text):
+        # // REASONING: Initializing the return array.
+        chunks = []
+        
+        # // REASONING: Splitting the string natively on sentence boundaries.
+        sentences = re.split('(?<=[.!?]) +', text)
+        
+        # // REASONING: Iterating through the generated sentence array.
+        for s in sentences:
+            # // REASONING: Checking if sentence falls within the object's defined safety limit.
+            if len(s) <= self.max_chars:
+                # // REASONING: Appending the intact sentence to the master array.
+                chunks.append(s.strip())
+            # // REASONING: Handling limit breaches.
+            else:
+                # // REASONING: Triggering secondary splitting via commas and semicolons.
+                sub_parts = re.split('(?<=[,;]) +', s)
+                
+                # // REASONING: Initializing the rebuilding buffer.
+                current_chunk = ""
+                
+                # // REASONING: Iterating through the smaller sub-parts.
+                for part in sub_parts:
+                    # // REASONING: Testing combination length against the object limit.
+                    if len(current_chunk) + len(part) + 1 <= self.max_chars:
+                        # // REASONING: Appending text to the current buffer string.
+                        current_chunk += (part + " ")
+                    # // REASONING: Handling buffer overflow conditions.
+                    else:
+                        # // REASONING: Committing the full buffer to the chunks array.
+                        chunks.append(current_chunk.strip())
+                        
+                        # // REASONING: Starting a new buffer with the overflowing part.
+                        current_chunk = part + " "
+                    # // REASONING: Closing the buffer limit logic.
+                # // REASONING: Closing the sub-parts iteration loop.
+                
+                # // REASONING: Evaluating if residual data remains in the buffer.
+                if current_chunk:
+                    # // REASONING: Flushing the residual buffer to the array.
+                    chunks.append(current_chunk.strip())
+                # // REASONING: Closing the residual buffer check.
+            # // REASONING: Closing the length evaluation logic.
+        # // REASONING: Closing the primary sentence loop.
+
+        # // REASONING: Returning the formatted chunk array.
+        return chunks
+    # // REASONING: Closing the split_text method.
+# // REASONING: Closing TheologicalParser class.

@@ -1,0 +1,22 @@
+# ==============================================================================
+# [FILE]: .gitignore
+# [PURPOSE]: Prevents heavy media and neural models from corrupting the Git repository.
+# Copyright (c) 2026 Dennis Sayer. All Rights Reserved. Written Mar-24-2026 11:45.
+# ==============================================================================
+
+# [REASONING]: Ignore all Coqui XTTS-v2 neural network weights.
+tts_models/
+
+# [REASONING]: Ignore all temporary audio and video artifacts.
+*.aac
+*.m4a
+*.mp4
+*.wav
+
+# [REASONING]: Ignore the raw manuscript and logs to keep the repo clean.
+sermon_manuscript.txt
+*log.txt
+
+# [REASONING]: Ignore Python cache files.
+__pycache__/
+*.pyc
